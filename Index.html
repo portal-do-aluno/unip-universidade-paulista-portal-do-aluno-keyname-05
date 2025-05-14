@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal do Aluno - PUC Campinas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset Básico */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff; /* fundo branco */
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    /* Cabeçalho */
+    header {
+      background-color: #002855; /* azul profundo */
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #ffffff;
+    }
+    header .logo img {
+      max-width: 100px;
+      height: auto;
+    }
+    header h1 {
+      font-size: 1.8rem;
+    }
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: inherit;
+    }
+    /* Navegação */
+    nav {
+      background-color: #005EB8; /* azul secundário */
+      padding: 1rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    nav ul li a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    nav ul li a:hover {
+      background-color: #003f7d;
+    }
+    .profile-card {
+      display: flex;
+      align-items: center;
+    }
+   .profile-card .profile-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Faz a imagem ficar circular */
+  overflow: hidden;
+  margin-right: 0.5rem;
+  border: 1.5px solid #f0f3f4; /* Borda ao redor da imagem */
+}
+
+.profile-card .profile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+    /* Conteúdo Principal */
+    main {
+      flex: 1;
+      padding: 2rem;
+      background-color: #ffffff;
+    }
+    .news-section {
+      background-color: #E5F0FA;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .news-section h2 {
+      color: #002855;
+      margin-bottom: 20px;
+    }
+    .news-item {
+      margin-bottom: 1.5rem;
+    }
+    .news-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .news-item h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #002855;
+    }
+    .news-item p {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .news-item a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #ED1C24; /* acento vermelho */
+      transition: color 0.3s;
+    }
+    .news-item a:hover {
+      color: #B10A1B;
+    }
+    /* Rodapé */
+    footer {
+      background-color: #002855;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #fff;
+    }
+    /* Pop-up da Carteirinha - Tema Dark Minimalista */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .popup-content {
+      background: linear-gradient(135deg, #005EB8, #002855);
+      border-radius: 20px;
+      width: 90vw;
+      max-width: 400px;
+      min-height: 550px;
+      padding: 25px 20px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      z-index: 1;
+    }
+    /* Card inner rotacionado para leitura (mantendo 90°) */
+    .card-inner {
+      transform: rotate(90deg);
+      transform-origin: center;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    /* Cabeçalho do Cartão */
+    .card-top {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 150%;
+      flex-wrap: nowrap;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .institution-logo img {
+      width: 75px;
+      opacity: 0.9;
+      filter: brightness(1.2);
+    }
+    .card-header {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ffffff;
+      border-bottom: 1px solid #7f8c8d;
+      padding-bottom: 8px;
+      white-space: nowrap;
+    }
+    /* Corpo do Cartão */
+    .card-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      width: 150%;
+      margin-left: 40px;
+    }
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .card-photo {
+      width: 120px;
+      height: 140px;
+    }
+    .card-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #ecf0f1;
+    }
+    .qr-code {
+      width: 100px;
+      height: 90px;
+      border: 2px solid #ecf0f1;
+      border-radius: 5px;
+      padding: 1px;
+      background-color: #ffffff;
+    }
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .right-column {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .right-column > div {
+      white-space: nowrap;
+    }
+    .right-column .card-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+    .right-column .card-info p,
+    .right-column .card-details p,
+    .right-column .card-footer p {
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+    .right-column .card-footer .usage-code {
+      font-weight: bold;
+      color: #ffffff;
+    }
+    /* Responsividade */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+      .menu-toggle {
+        display: block;
+      }
+      nav ul {
+        display: none;
+        flex-direction: column;
+      }
+      nav ul.active {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabeçalho da Página -->
+  <header>
+    <div class="logo">
+      <img src="https://logodownload.org/wp-content/uploads/2021/06/unip-logo.png" alt="Logo PUC Campinas">
+    </div>
+    <h1>Portal do Aluno</h1>
+    <button class="menu-toggle" aria-label="Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
+  
+  <!-- Navegação Principal -->
+  <nav>
+    <ul class="active">
+      <li class="profile-card">
+        <a href="#" id="openCard">
+          <div class="profile-icon">
+            <img src="https://i.imgur.com/BNs8B0i.jpeg" alt="Foto de perfil">
+          </div>
+          <span>Meu perfil</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-newspaper"></i>
+          <span>Últimas Notícias</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-clock"></i>
+          <span>Horários de Aula</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-clipboard"></i>
+          <span>Notas</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-calendar"></i>
+          <span>Calendário</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-book"></i>
+          <span>Biblioteca</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-envelope"></i>
+          <span>Mensagens</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+  <!-- Conteúdo Principal -->
+  <main>
+    <section class="news-section" aria-labelledby="news-title">
+      <h2 id="news-title">Últimas Notícias</h2>
+      <article class="news-item">
+        <img src="https://www.puc-campinas.edu.br/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-11-at-09.44.52-1-Recortada-2.jpeg" alt="Aluno do Mestrado apresenta trabalho">
+        <h3>Aluno do Mestrado apresenta trabalho sobre regulação climática</h3>
+        <p>Estratégias para mitigar impactos das mudanças climáticas...</p>
+        <a href="#" target="_blank" rel="noopener">Leia mais...</a>
+      </article>
+      <article class="news-item">
+        <img src="https://www.puc-campinas.edu.br/wp-content/uploads/2025/02/resized-image-Promo-2025-02-14T113350.618.jpeg" alt="Vitalità programação 2025">
+        <h3>Vitalità abre programação 2025 com acolhida a voluntários</h3>
+        <p>Evento de integração e apresentações culturais...</p>
+        <a href="#" target="_blank" rel="noopener">Leia mais...</a>
+      </article>
+    </section>
+  </main>
+  
+  <!-- Rodapé -->
+  <footer>
+    © 2025 PUC Campinas - Portal do Aluno
+  </footer>
+  
+  <!-- Pop-up da Carteirinha -->
+  <div id="studentCardPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+    <div class="popup-content">
+      <button class="close-btn" aria-label="Fechar">&times;</button>
+      <div class="card-inner">
+        <!-- Cabeçalho do Cartão: logo e título em uma única linha centralizados -->
+        <div class="card-top">
+          <div class="institution-logo">
+            <img src="https://logodownload.org/wp-content/uploads/2021/06/unip-logo.png" alt="Logo UNIP">
+          </div>
+          <div class="card-header" id="cardTitle">
+            Carteira do Estudante
+          </div>
+        </div>
+        <!-- Corpo do Cartão: foto e QR code à esquerda e dados do estudante à direita -->
+        <div class="card-body">
+          <div class="left-column">
+            <div class="card-photo">
+              <img src="https://i.imgur.com/Urcv6nD.jpeg" alt="Foto do Estudante">
+            </div>
+            <div class="qr-code">
+              <img src="https://i.imgur.com/V0AiPLp.png" alt="QR Code">
+            </div>
+          </div>
+          <div class="right-column">
+            <div class="card-info">
+              <h3>Felipe Martins de Carvalho</h3>
+              <p><strong>Curso:</strong> Administração</p>
+              <p><strong>CPF:</strong> 402.253.908-92</p>
+              <p><strong>UNIP São Paulo</strong> Paraíso</p>
+              <p>.</p>
+              <p>.</p>
+              <p class="usage-code"><strong>RA:</strong> 20252309 <strong>| Dezembro/2025</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <script>
+    // Toggle do menu responsivo
+    document.querySelector('.menu-toggle').addEventListener('click', () => {
+      document.querySelector('nav ul').classList.toggle('active');
+    });
+    // Exibe o pop-up da carteirinha
+    document.getElementById('openCard').addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById('studentCardPopup').style.display = 'flex';
+    });
+    // Fecha o pop-up
+    document.querySelector('.close-btn').addEventListener('click', function() {
+      document.getElementById('studentCardPopup').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
